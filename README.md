@@ -7,9 +7,9 @@ Sandbox for Love2D made with 💕 and Lua
 
 ## MacOSX
 
-* Download [Love2D]()
-* Put the .app file in your Applications folder
-* Edit your .profile or .bash_profile to make an alias for the app:
+* Download [Love2D](https://love2d.org/#download)
+* Put the .app file in your Applications folder (`~/Applications`)
+* Edit your `.profile` or `.bash_profile` to make an alias for the app:
 
 ```bash
 alias love="/Applications/love.app/Contents/MacOS/love"
