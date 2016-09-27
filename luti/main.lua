@@ -18,6 +18,16 @@ function love.load()
 		enemy.y = enemy.height + 100
 		table.insert(enemies, enemy)
 	end
+
+    colors = {}
+    colors["red"] = {255, 255, 0}
+    colors["green"] = {0, 255, 255}
+end
+
+function love.keypressed(key)
+    if (key == "d") then
+        shoot()
+    end
 end
 
 function love.keyreleased(key)
@@ -94,6 +104,14 @@ function love.draw()
 	for i,v in ipairs(hero.shots) do
 		love.graphics.rectangle("fill", v.x, v.y, 2, 5)
 	end
+
+    -- Draw words
+    love.graphics.setColor(0, 255, 0, 255)
+    love.graphics.print("ddd", 10, 200)
+
+    colored_text = {colors.red, "uuuu", colors.green, "dd"}
+    love.graphics.print(colored_text, 10, 100)
+
 	-- let's draw our enemies
 	love.graphics.setColor(0,255,255,255)
 	for i,v in ipairs(enemies) do
