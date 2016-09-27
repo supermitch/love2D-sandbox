@@ -109,6 +109,7 @@ function love.draw()
     love.graphics.setColor(0, 255, 0, 255)
     love.graphics.print("ddd", 10, 200)
 
+    love.graphics.setColor(255, 255, 255)
     colored_text = {colors.red, "uuuu", colors.green, "dd"}
     love.graphics.print(colored_text, 10, 100)
 
