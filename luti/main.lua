@@ -7,16 +7,16 @@ function love.load()
 	hero.width = 30
 	hero.height = 15
 	hero.speed = 150
-	hero.shots = {} -- holds our fired shots
 
-	enemies = {}
-	for i=0,7 do
-		enemy = {}
-		enemy.width = 40
-		enemy.height = 20
-		enemy.x = i * (enemy.width + 60) + 100
-		enemy.y = enemy.height + 100
-		table.insert(enemies, enemy)
+	words = {}
+	for i = 0, 5 do
+		word = {}
+        word.text = "dddd"
+        word.width = 40
+        word.height = 20
+		word.x = i * 60 + 100
+		word.y = 100
+		table.insert(words, word)
 	end
 
     colors = {}
@@ -26,13 +26,11 @@ end
 
 function love.keypressed(key)
     if (key == "d") then
-        shoot()
     end
 end
 
 function love.keyreleased(key)
 	if (key == "space") then
-		shoot()
 	end
 end
 
@@ -44,43 +42,10 @@ function love.update(dt)
 		hero.x = hero.x + hero.speed*dt
 	end
 
-	local remEnemy = {}
-	local remShot = {}
-
-	-- update the shots
-	for i,v in ipairs(hero.shots) do
-
-		v.y = v.y - dt * 100 -- move them up up up
-
-		-- mark shots that are not visible for removal
-		if v.y < 0 then
-			table.insert(remShot, i)
-		end
-
-		-- check for collision with enemies
-		for ii,vv in ipairs(enemies) do
-			if CheckCollision(v.x,v.y,2,5,vv.x,vv.y,vv.width,vv.height) then
-				table.insert(remEnemy, ii) -- mark that enemy for removal
-				table.insert(remShot, i) -- mark the shot to be removed
-			end
-		end
-	end
-
-	-- remove the marked enemies
-	for i,v in ipairs(remEnemy) do
-		table.remove(enemies, v)
-	end
-
-	for i,v in ipairs(remShot) do
-		table.remove(hero.shots, v)
-	end
-
-	-- update those evil enemies
-	for i,v in ipairs(enemies) do
-		-- let them fall down slowly
-		v.y = v.y + dt
-		-- check for collision with ground
-		if v.y > 465 then
+	-- update falling words
+	for i,v in ipairs(words) do
+		v.y = v.y + 6 * dt -- let them fall down slowly
+		if v.y > 465 then -- check for collision with ground
 			-- you loose!!!
 		end
 	end
@@ -88,43 +53,36 @@ end
 
 
 function love.draw()
-	-- let's draw a background
-	love.graphics.setColor(255,255,255,255)
+	-- draw a background
+	love.graphics.setColor(255, 255, 255)
 
-	-- let's draw some ground
-	love.graphics.setColor(0,255,0,255)
+	-- draw some ground
+	love.graphics.setColor(0, 255, 0)
 	love.graphics.rectangle("fill", 0, 465, 800, 150)
 
-	-- let's draw our hero
-	love.graphics.setColor(255,255,0,255)
+	-- draw our hero
+	love.graphics.setColor(255, 255, 0)
 	love.graphics.rectangle("fill", hero.x, hero.y, hero.width, hero.height)
 
-	-- let's draw our heros shots
-	love.graphics.setColor(255,255,255,255)
-	for i,v in ipairs(hero.shots) do
-		love.graphics.rectangle("fill", v.x, v.y, 2, 5)
-	end
-
     -- Draw words
-    love.graphics.setColor(0, 255, 0, 255)
-    love.graphics.print("ddd", 10, 200)
+	for _, word in ipairs(words) do
+        love.graphics.setColor(20, 85, 85)
+        love.graphics.rectangle("fill", word.x, word.y, word.width, word.height)
 
-    love.graphics.setColor(255, 255, 255)
-    colored_text = {colors.red, "uuuu", colors.green, "dd"}
-    love.graphics.print(colored_text, 10, 100)
+        love.graphics.setColor(0, 255, 0)
+        love.graphics.print(word.text, word.x, word.y)
 
-	-- let's draw our enemies
-	love.graphics.setColor(0,255,255,255)
-	for i,v in ipairs(enemies) do
-		love.graphics.rectangle("fill", v.x, v.y, v.width, v.height)
+        --[[
+        -- TODO: Parts of words colorized as they are typed
+        love.graphics.setColor(255, 255, 255)
+        colored_text = {colors.red, "uuuu", colors.green, "dd"}
+        love.graphics.print(colored_text, 10, 100)
+        --]]
 	end
 end
 
-function shoot()
-	local shot = {}
-	shot.x = hero.x+hero.width/2
-	shot.y = hero.y
-	table.insert(hero.shots, shot)
+
+function draw_words(words)
 end
 
 -- Collision detection function.
