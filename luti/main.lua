@@ -1,6 +1,10 @@
 debug = true
 
 function love.load()
+
+    -- Screen properties
+    love.window.setMode(800, 600, {resizable=true, minwidth=400, minheight=300})
+
 	hero = {} -- new table for the hero
 	hero.x = 300	-- x,y coordinates of the hero
 	hero.y = 450
