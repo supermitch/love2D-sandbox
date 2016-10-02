@@ -28,8 +28,11 @@ function love.load()
     colors["green"] = {0, 255, 255}
 end
 
-function love.keypressed(key)
-    if (key == "d") then
+function love.keypressed(k)
+    if k == "d" then
+    end
+    if k == 'escape' then
+        love.event.quit()
     end
 end
 
