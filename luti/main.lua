@@ -1,4 +1,5 @@
-debug = true
+log = require "log"
+
 
 function love.load()
 
@@ -29,6 +30,7 @@ function love.load()
 end
 
 function love.keypressed(k)
+    log.info("Pressed: " .. k)
     if k == "d" then
     end
     if k == 'escape' then
