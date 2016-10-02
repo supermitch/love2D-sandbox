@@ -2,7 +2,6 @@ log = require "log"
 
 
 function love.load()
-
     -- Screen properties
     love.window.setMode(800, 600, {resizable=true, minwidth=400, minheight=300})
 
@@ -29,6 +28,7 @@ function love.load()
     colors["green"] = {0, 255, 255}
 end
 
+
 function love.keypressed(k)
     log.info("Pressed: " .. k)
     if k == "d" then
@@ -38,10 +38,12 @@ function love.keypressed(k)
     end
 end
 
+
 function love.keyreleased(key)
 	if (key == "space") then
 	end
 end
+
 
 function love.update(dt)
 	-- keyboard actions for our hero
@@ -49,14 +51,6 @@ function love.update(dt)
 		hero.x = hero.x - hero.speed*dt
 	elseif love.keyboard.isDown("right") then
 		hero.x = hero.x + hero.speed*dt
-	end
-
-	-- update falling words
-	for i,v in ipairs(words) do
-		v.y = v.y + 6 * dt -- let them fall down slowly
-		if v.y > 465 then -- check for collision with ground
-			-- you loose!!!
-		end
 	end
 end
 
@@ -94,9 +88,7 @@ end
 function draw_words(words)
 end
 
--- Collision detection function.
--- Checks if a and b overlap.
--- w and h mean width and height.
+-- Checks if rectangles a and b overlap.
 function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
   local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
   return ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1
