@@ -15,7 +15,8 @@ function love.load()
 	words = {}
 	for i = 0, 5 do
 		word = {}
-        word.text = "dddd"
+        word.untyped = "dddd"
+        word.typed = ""
         word.width = 40
         word.height = 20
 		word.x = i * 60 + 100
@@ -30,27 +31,28 @@ end
 
 
 function love.keypressed(k)
-    log.info("Pressed: " .. k)
-    if k == "d" then
-    end
+    log.debug("Pressed: " .. k)
+
+    local next_word = getNextWord()  -- TODO: global words?
+    local next_letter = getNextLetter(next_word)
+
     if k == 'escape' then
         love.event.quit()
+    elseif k == next_letter then
+        log.debug('Correct')
+    else
+        log.debug('Wrong')
+        -- TODO: death
     end
-end
-
-
-function love.keyreleased(key)
-	if (key == "space") then
-	end
 end
 
 
 function love.update(dt)
 	-- keyboard actions for our hero
 	if love.keyboard.isDown("left") then
-		hero.x = hero.x - hero.speed*dt
+		hero.x = hero.x - hero.speed * dt
 	elseif love.keyboard.isDown("right") then
-		hero.x = hero.x + hero.speed*dt
+		hero.x = hero.x + hero.speed * dt
 	end
 end
 
