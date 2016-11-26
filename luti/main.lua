@@ -6,17 +6,17 @@ function love.load()
     love.window.setMode(800, 600, {resizable=true, minwidth=400, minheight=300})
 
 	hero = {} -- new table for the hero
-	hero.x = 300	-- x,y coordinates of the hero
+	hero.x = 300 -- x,y coordinates of the hero
 	hero.y = 450
 	hero.width = 30
 	hero.height = 15
 	hero.speed = 150
 
-	words = {}
+	words = {} -- Words contains all the words for a level?
 	for i = 0, 5 do
 		word = {}
-        word.untyped = "dddd"
-        word.typed = ""
+        word.untyped = {"d", "d", "d", "d"}
+        word.typed = {}
         word.width = 40
         word.height = 20
 		word.x = i * 60 + 100
@@ -30,16 +30,33 @@ function love.load()
 end
 
 
+function updateCorrect(word)
+    word.typed.append(word.untyped[1])
+    word.untyped[1] = nil
+    return word
+end
+
+function getNextWord(words)
+    return word.untyped[1]
+end
+
+
+function getNextLetter(word)
+    return word[1]
+end
+
+
 function love.keypressed(k)
     log.debug("Pressed: " .. k)
 
-    local next_word = getNextWord()  -- TODO: global words?
+    local next_word = getNextWord(words)
     local next_letter = getNextLetter(next_word)
 
     if k == 'escape' then
         love.event.quit()
     elseif k == next_letter then
         log.debug('Correct')
+        updateCorrect(next_word) -- TODO: Method of next_word?
     else
         log.debug('Wrong')
         -- TODO: death
@@ -75,7 +92,7 @@ function love.draw()
         love.graphics.rectangle("fill", word.x, word.y, word.width, word.height)
 
         love.graphics.setColor(0, 255, 0)
-        love.graphics.print(word.text, word.x, word.y)
+        love.graphics.print(word.untyped, word.x, word.y)
 
         --[[
         -- TODO: Parts of words colorized as they are typed
