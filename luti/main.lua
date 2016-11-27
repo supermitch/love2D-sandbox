@@ -5,24 +5,24 @@ function love.load()
     -- Screen properties
     love.window.setMode(800, 600, {resizable=true, minwidth=400, minheight=300})
 
-	hero = {} -- new table for the hero
-	hero.x = 300 -- x,y coordinates of the hero
-	hero.y = 450
-	hero.width = 30
-	hero.height = 15
-	hero.speed = 150
+    hero = {} -- new table for the hero
+    hero.x = 300 -- x,y coordinates of the hero
+    hero.y = 450
+    hero.width = 30
+    hero.height = 15
+    hero.speed = 150
 
-	words = {} -- Words contains all the words for a level?
-	for i = 0, 5 do
-		word = {}
-        word.untyped = {"d", "d", "d", "d"}
+    words = {} -- Words contains all the words for a level?
+    for i = 0, 5 do
+        word = {}
+        word.untyped = {"c", "a", "t", "s"}
         word.typed = {}
         word.width = 40
         word.height = 20
-		word.x = i * 60 + 100
-		word.y = 100
-		table.insert(words, word)
-	end
+        word.x = i * 60 + 100
+        word.y = 100
+        table.insert(words, word)
+    end
 
     colors = {}
     colors["red"] = {255, 255, 0}
@@ -31,13 +31,13 @@ end
 
 
 function updateCorrect(word)
-    word.typed.append(word.untyped[1])
+    table.insert(word.typed, word.untyped[1])
     word.untyped[1] = nil
     return word
 end
 
 function getNextWord(words)
-    return word.untyped[1]
+    return words[1]
 end
 
 
@@ -47,47 +47,46 @@ end
 
 
 function love.keypressed(k)
-    log.debug("Pressed: " .. k)
-
-    local next_word = getNextWord(words)
-    local next_letter = getNextLetter(next_word)
+    local next_word = words[1]
+    local next_letter = next_word.untyped[1]
+    log.debug('Next letter: ' .. next_letter)
 
     if k == 'escape' then
         love.event.quit()
     elseif k == next_letter then
-        log.debug('Correct')
+        log.info('Correct')
         updateCorrect(next_word) -- TODO: Method of next_word?
     else
-        log.debug('Wrong')
+        log.info('Wrong')
         -- TODO: death
     end
 end
 
 
 function love.update(dt)
-	-- keyboard actions for our hero
-	if love.keyboard.isDown("left") then
-		hero.x = hero.x - hero.speed * dt
-	elseif love.keyboard.isDown("right") then
-		hero.x = hero.x + hero.speed * dt
-	end
+    -- keyboard actions for our hero
+    if love.keyboard.isDown("left") then
+        hero.x = hero.x - hero.speed * dt
+    elseif love.keyboard.isDown("right") then
+        hero.x = hero.x + hero.speed * dt
+    end
 end
 
 
 function love.draw()
-	-- draw a background
-	love.graphics.setColor(255, 255, 255)
+    -- draw a background
+    love.graphics.setColor(255, 255, 255)
 
-	-- draw some ground
-	love.graphics.setColor(0, 255, 0)
-	love.graphics.rectangle("fill", 0, 465, 800, 150)
+    -- draw some ground
+    love.graphics.setColor(0, 255, 0)
+    love.graphics.rectangle("fill", 0, 465, 800, 150)
 
-	-- draw our hero
-	love.graphics.setColor(255, 255, 0)
-	love.graphics.rectangle("fill", hero.x, hero.y, hero.width, hero.height)
+    -- draw our hero
+    love.graphics.setColor(255, 255, 0)
+    love.graphics.rectangle("fill", hero.x, hero.y, hero.width, hero.height)
 
     -- Draw words
-	for _, word in ipairs(words) do
+    for _, word in ipairs(words) do
         love.graphics.setColor(20, 85, 85)
         love.graphics.rectangle("fill", word.x, word.y, word.width, word.height)
 
@@ -100,7 +99,7 @@ function love.draw()
         colored_text = {colors.red, "uuuu", colors.green, "dd"}
         love.graphics.print(colored_text, 10, 100)
         --]]
-	end
+    end
 end
 
 
