@@ -31,8 +31,7 @@ end
 
 
 function updateCorrect(word)
-    table.insert(word.typed, word.untyped[1])
-    word.untyped[1] = nil
+    table.insert(word.typed, table.remove(word.untyped, 1))
     return word
 end
 
@@ -49,6 +48,7 @@ end
 function love.keypressed(k)
     local next_word = words[1]
     local next_letter = next_word.untyped[1]
+    log.debug('Next word is: ' .. table.concat(next_word.untyped))
     log.debug('Next letter: ' .. next_letter)
 
     if k == 'escape' then
@@ -65,11 +65,6 @@ end
 
 function love.update(dt)
     -- keyboard actions for our hero
-    if love.keyboard.isDown("left") then
-        hero.x = hero.x - hero.speed * dt
-    elseif love.keyboard.isDown("right") then
-        hero.x = hero.x + hero.speed * dt
-    end
 end
 
 
@@ -91,7 +86,7 @@ function love.draw()
         love.graphics.rectangle("fill", word.x, word.y, word.width, word.height)
 
         love.graphics.setColor(0, 255, 0)
-        love.graphics.print(word.untyped, word.x, word.y)
+        love.graphics.print(table.concat(word.untyped, ''), word.x, word.y)
 
         --[[
         -- TODO: Parts of words colorized as they are typed
