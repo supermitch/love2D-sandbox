@@ -12,8 +12,9 @@ function love.load()
     hero.height = 15
     hero.speed = 150
 
-    words = {} -- Words contains all the words for a level?
+    words = {done = {}, todo = {}} -- Words contains all the words for a level?
     for i = 0, 5 do
+        local word
         word = {}
         word.untyped = {'c', 'a', 't', 's'}
         word.typed = {}
@@ -21,7 +22,7 @@ function love.load()
         word.height = 20
         word.x = i * 60 + 100
         word.y = 100
-        table.insert(words, word)
+        table.insert(words.todo, word)
     end
 
     colors = {}
@@ -32,33 +33,25 @@ end
 
 function updateCorrect(word)
     table.insert(word.typed, table.remove(word.untyped, 1))
-    return word
-end
-
-function getNextWord(words)
-    return words[1]
-end
-
-
-function getNextLetter(word)
-    return word[1]
+    if next(word.untyped) == nil then -- If this word is now empty
+        table.insert(words.done, table.remove(words.todo, 1)) -- Move into completed
+    end
 end
 
 
 function love.keypressed(k)
-    local next_word = words[1]
-    local next_letter = next_word.untyped[1]
-    log.debug('Next word is: ' .. table.concat(next_word.untyped))
-    log.debug('Next letter: ' .. next_letter)
+    local current_word = words.todo[1]
+    log.debug('Current word is: ' .. table.concat(current_word.untyped))
+    local next_letter = current_word.untyped[1]
+    log.debug('  Next letter: ' .. next_letter)
 
     if k == 'escape' then
         love.event.quit()
     elseif k == next_letter then
-        log.info('Correct')
-        updateCorrect(next_word) -- TODO: Method of next_word?
+        log.info('Correct!')
+        updateCorrect(current_word)
     else
-        log.info('Wrong')
-        -- TODO: death
+        log.info('Wrong') -- TODO: death
     end
 end
 
@@ -70,22 +63,23 @@ end
 
 function love.draw()
     love.graphics.setColor(0, 255, 0)
-    love.graphics.rectangle('fill', 0, 465, 800, 150) -- draw some ground
+    love.graphics.rectangle('fill', 0, 465, 800, 150) -- some ground
 
     love.graphics.setColor(255, 255, 0)
-    love.graphics.rectangle('fill', hero.x, hero.y, hero.width, hero.height) -- draw our hero
+    love.graphics.rectangle('fill', hero.x, hero.y, hero.width, hero.height) -- our hero
 
-    for _, word in ipairs(words) do -- Draw 'platforms'
-        love.graphics.setColor(20, 85, 85)
-        love.graphics.rectangle('fill', word.x, word.y, word.width, word.height)
-    end
+    for _, category in pairs(words) do -- For both done & todo
+        for _, word in ipairs(category) do -- Draw words
 
-    for _, word in ipairs(words) do -- Draw words
-        love.graphics.setColor(255, 255, 255)
-        local untyped = table.concat(word.untyped)
-        local typed = table.concat(word.typed)
-        local colored_text = {colors.green, typed, colors.red, untyped}
-        love.graphics.print(colored_text, word.x, word.y)
+            love.graphics.setColor(20, 85, 85)
+            love.graphics.rectangle('fill', word.x, word.y, word.width, word.height)  -- platforms
+
+            love.graphics.setColor(255, 255, 255)
+            local untyped = table.concat(word.untyped)
+            local typed = table.concat(word.typed)
+            local colored_text = {colors.green, typed, colors.red, untyped}
+            love.graphics.print(colored_text, word.x, word.y)
+        end
     end
 end
 
