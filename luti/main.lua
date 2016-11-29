@@ -1,4 +1,4 @@
-log = require "log"
+log = require 'log'
 
 
 function love.load()
@@ -15,7 +15,7 @@ function love.load()
     words = {} -- Words contains all the words for a level?
     for i = 0, 5 do
         word = {}
-        word.untyped = {"c", "a", "t", "s"}
+        word.untyped = {'c', 'a', 't', 's'}
         word.typed = {}
         word.width = 40
         word.height = 20
@@ -25,8 +25,8 @@ function love.load()
     end
 
     colors = {}
-    colors["red"] = {255, 255, 0}
-    colors["green"] = {0, 255, 255}
+    colors['red'] = {255, 0, 0}
+    colors['green'] = {0, 255, 0}
 end
 
 
@@ -69,36 +69,24 @@ end
 
 
 function love.draw()
-    -- draw a background
-    love.graphics.setColor(255, 255, 255)
-
-    -- draw some ground
     love.graphics.setColor(0, 255, 0)
-    love.graphics.rectangle("fill", 0, 465, 800, 150)
+    love.graphics.rectangle('fill', 0, 465, 800, 150) -- draw some ground
 
-    -- draw our hero
     love.graphics.setColor(255, 255, 0)
-    love.graphics.rectangle("fill", hero.x, hero.y, hero.width, hero.height)
+    love.graphics.rectangle('fill', hero.x, hero.y, hero.width, hero.height) -- draw our hero
 
-    -- Draw words
-    for _, word in ipairs(words) do
+    for _, word in ipairs(words) do -- Draw 'platforms'
         love.graphics.setColor(20, 85, 85)
-        love.graphics.rectangle("fill", word.x, word.y, word.width, word.height)
-
-        love.graphics.setColor(0, 255, 0)
-        love.graphics.print(table.concat(word.untyped, ''), word.x, word.y)
-
-        --[[
-        -- TODO: Parts of words colorized as they are typed
-        love.graphics.setColor(255, 255, 255)
-        colored_text = {colors.red, "uuuu", colors.green, "dd"}
-        love.graphics.print(colored_text, 10, 100)
-        --]]
+        love.graphics.rectangle('fill', word.x, word.y, word.width, word.height)
     end
-end
 
-
-function draw_words(words)
+    for _, word in ipairs(words) do -- Draw words
+        love.graphics.setColor(255, 255, 255)
+        local untyped = table.concat(word.untyped)
+        local typed = table.concat(word.typed)
+        local colored_text = {colors.green, typed, colors.red, untyped}
+        love.graphics.print(colored_text, word.x, word.y)
+    end
 end
 
 -- Checks if rectangles a and b overlap.
