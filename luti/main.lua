@@ -68,17 +68,27 @@ function love.draw()
     love.graphics.setColor(255, 255, 0)
     love.graphics.rectangle('fill', hero.x, hero.y, hero.width, hero.height) -- our hero
 
-    for _, category in pairs(words) do -- For both done & todo
+    for key, category in pairs(words) do -- For both done & todo
         for _, word in ipairs(category) do -- Draw words
 
             love.graphics.setColor(20, 85, 85)
             love.graphics.rectangle('fill', word.x, word.y, word.width, word.height)  -- platforms
 
             love.graphics.setColor(255, 255, 255)
-            local untyped = table.concat(word.untyped)
+            -- local colored_text = {colors.red, untyped, colors.green, typed}
             local typed = table.concat(word.typed)
-            local colored_text = {colors.green, typed, colors.red, untyped}
-            love.graphics.print(colored_text, word.x, word.y)
+            local untyped = table.concat(word.untyped)
+
+            if untyped == '' then
+                love.graphics.setColor(colors.green)
+                love.graphics.print(typed, word.x, word.y)
+            elseif typed == '' then
+                love.graphics.setColor(colors.red)
+                love.graphics.print(untyped, word.x, word.y)
+            else
+                local colored_text = {colors.green, typed, colors.red, untyped}
+                love.graphics.print(colored_text, word.x, word.y)
+            end
         end
     end
 end
