@@ -3,25 +3,27 @@ log = require 'log'
 
 function love.load()
     -- Screen properties
-    love.window.setMode(800, 600, {resizable=true, minwidth=400, minheight=300})
+    screen = {width = 800, height = 600}
+    love.window.setMode(screen.width, screen.height, {resizable=true, minwidth=400, minheight=300})
 
-    hero = {} -- new table for the hero
-    hero.x = 300 -- x,y coordinates of the hero
-    hero.y = 450
-    hero.width = 30
-    hero.height = 15
-    hero.speed = 150
+    hero = { -- new table for the hero
+        x = 300,
+        y = 450,
+        width = 30,
+        height = 15,
+        speed = 150,
+    }
 
     words = {done = {}, todo = {}} -- Words contains all the words for a level?
     for i = 0, 5 do
-        local word
-        word = {}
-        word.untyped = {'c', 'a', 't', 's'}
-        word.typed = {}
-        word.width = 40
-        word.height = 20
-        word.x = i * 60 + 100
-        word.y = 100
+        local word = {
+            untyped = {'c', 'a', 't', 's'},
+            typed = {},
+            width = 40,
+            height = 20,
+            x = i * 60 + 100,
+            y = 100,
+        }
         table.insert(words.todo, word)
     end
 
@@ -45,14 +47,11 @@ end
 
 function love.keypressed(k)
     local current_word = words.todo[1]
-    log.debug('Current word is: ' .. table.concat(current_word.untyped))
     local next_letter = current_word.untyped[1]
-    log.debug('  Next letter: ' .. next_letter)
 
     if k == 'escape' then
         love.event.quit()
     elseif k == next_letter then
-        log.info('Correct!')
         updateCorrect(current_word)
     else
         log.info('Wrong') -- TODO: death
@@ -67,29 +66,29 @@ end
 
 function love.draw()
     love.graphics.setColor(colors.green)
-    love.graphics.rectangle('fill', 0, 465, 800, 150) -- some ground
+    love.graphics.rectangle('fill', 0, 465, screen.width, 150) -- some ground
 
     love.graphics.setColor(colors.yellow)
     love.graphics.rectangle('fill', hero.x, hero.y, hero.width, hero.height) -- our hero
 
-    for key, category in pairs(words) do -- For both done & todo
+    for _, category in pairs(words) do -- For both done & todo
         for _, word in ipairs(category) do -- Draw words
 
             love.graphics.setColor(colors.gray)
-            love.graphics.rectangle('fill', word.x, word.y, word.width, word.height)  -- platforms
+            love.graphics.rectangle('fill', word.x, word.y, word.width, word.height) -- platforms
 
             local typed = table.concat(word.typed)
             local untyped = table.concat(word.untyped)
 
-            if untyped == '' then
+            if untyped == '' then -- All typed
                 love.graphics.setColor(colors.green)
                 love.graphics.print(typed, word.x, word.y)
-            elseif typed == '' then
+            elseif typed == '' then  -- Nothing typed
                 love.graphics.setColor(colors.red)
                 love.graphics.print(untyped, word.x, word.y)
-            else
+            else -- In progress
                 love.graphics.setColor(colors.white)
-                local colored_text = {colors.green, typed, colors.red, untyped}
+                local colored_text = {colors.green, typed, colors.red, untyped} -- Can't print empty strings this way
                 love.graphics.print(colored_text, word.x, word.y)
             end
         end
