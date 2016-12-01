@@ -40,7 +40,9 @@ end
 function updateCorrect(word)
     table.insert(word.typed, table.remove(word.untyped, 1))
     if next(word.untyped) == nil then -- If this word is now empty
-        table.insert(words.done, table.remove(words.todo, 1)) -- Move into completed
+        if next(words.todo) ~= nil then
+            table.insert(words.done, table.remove(words.todo, 1)) -- Move into completed
+        end
     end
 end
 
@@ -56,6 +58,12 @@ function love.keypressed(k)
     else
         log.info('Wrong') -- TODO: death
     end
+
+    if next(words.todo) == nil then -- No more words
+        log.info('Level complete!')
+        love.event.quit() -- TODO: next level?
+    end
+
 end
 
 
