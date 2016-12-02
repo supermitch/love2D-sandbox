@@ -42,6 +42,7 @@ function updateCorrect(word)
     if next(word.untyped) == nil then -- If this word is now empty
         if next(words.todo) ~= nil then
             table.insert(words.done, table.remove(words.todo, 1)) -- Move into completed
+            log.info('Word complete')
         end
     end
 end
@@ -50,13 +51,21 @@ end
 function love.keypressed(k)
     local current_word = words.todo[1]
     local next_letter = current_word.untyped[1]
+    local new_word = current_word.typed == nil -- Did we just finish the last word?
 
     if k == 'escape' then
         love.event.quit()
     elseif k == next_letter then
         updateCorrect(current_word)
+    elseif k == 'space' or k == 'return' then
+        if new_word then
+            log.debug('Word complete')
+        else
+            log.debug('Typo')
+        end
+        -- We ignore space and enter at the end of words!
     else
-        log.info('Wrong') -- TODO: death
+        log.debug('Wrong') -- TODO: death
     end
 
     if next(words.todo) == nil then -- No more words
