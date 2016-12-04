@@ -51,14 +51,13 @@ end
 function love.keypressed(k)
     local current_word = words.todo[1]
     local next_letter = current_word.untyped[1]
-    local new_word = current_word.typed == nil -- Did we just finish the last word?
 
     if k == 'escape' then
         love.event.quit()
     elseif k == next_letter then
         updateCorrect(current_word)
     elseif k == 'space' or k == 'return' then
-        if new_word then
+        if next(current_word.typed) == ni then -- Did we just finish the last word?
             log.debug('Word complete')
         else
             log.debug('Typo')
