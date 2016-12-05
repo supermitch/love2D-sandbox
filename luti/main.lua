@@ -14,10 +14,13 @@ function love.load()
         speed = 150,
     }
 
-    words = {done = {}, todo = {}} -- Words contains all the words for a level?
-    for i = 0, 5 do
+    level_text = {'hats', 'horses', 'mouse', 'cats', 'ddd'}
+    words = {done = {}, todo = {}}
+    for i, text in ipairs(level_text) do
+        local text_table = {}
+        text:gsub('.', function(c) table.insert(text_table, c) end)
         local word = {
-            untyped = {'c', 'a', 't', 's'},
+            untyped = text_table,
             typed = {},
             width = 40,
             height = 20,
