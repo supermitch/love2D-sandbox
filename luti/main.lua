@@ -14,6 +14,9 @@ function love.load()
         speed = 150,
     }
 
+    word_font = love.graphics.newFont(12)
+    love.graphics.setFont(word_font)
+
     level_text = {'hats', 'horses', 'mouse', 'cats', 'ddd'}
     words = {done = {}, todo = {}}
     for i, text in ipairs(level_text) do
@@ -22,7 +25,7 @@ function love.load()
         local word = {
             untyped = text_table,
             typed = {},
-            width = 40,
+            width = word_font:getWidth(text) * 1.1,
             height = 20,
             x = i * 60 + 100,
             y = 100,
