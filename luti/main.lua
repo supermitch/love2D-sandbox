@@ -25,6 +25,7 @@ function love.load()
         local word = {
             untyped = text_table,
             typed = {},
+            complete = false,
             width = word_font:getWidth(text) * 1.1,
             height = 20,
             x = i * 60 + 100,
@@ -46,6 +47,7 @@ end
 function updateCorrect(word)
     table.insert(word.typed, table.remove(word.untyped, 1))
     if next(word.untyped) == nil then -- If this word is now empty
+        word.complete = true
         if next(words.todo) ~= nil then
             table.insert(words.done, table.remove(words.todo, 1)) -- Move into completed
             log.info('Word complete')
@@ -63,7 +65,8 @@ function love.keypressed(k)
     elseif k == next_letter then
         updateCorrect(current_word)
     elseif k == 'space' or k == 'return' then
-        if next(current_word.typed) == ni then -- Did we just finish the last word?
+        if next(current_word.typed) == nil and not current_word.complete then -- Did we just finish the last word?
+            current_word.complete = true
             log.debug('Word complete')
         else
             log.debug('Typo')
