@@ -19,9 +19,15 @@ function love.load()
     word_font = love.graphics.newFont(12)
     love.graphics.setFont(word_font)
 
-    level_text = {'hats', 'horses', 'mouse', 'cats', 'ddd'}
+    levels = {
+        {'one', 'hats', 'horses', 'mouse', 'cats', 'ddd'},
+        {'two', 'dead', 'sea', 'plant', 'car', 'dart'},
+        {'three', 'jump', 'ant', 'art', 'fart', 'star'},
+    }
+    current_level = 2
+
     words = {done = {}, todo = {}}
-    for i, text in ipairs(level_text) do
+    for i, text in ipairs(levels[current_level]) do
         local text_table = {}
         text:gsub('.', function(c) table.insert(text_table, c) end)
         local word = {
