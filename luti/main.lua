@@ -1,6 +1,7 @@
 log = require 'log'
 
 renderer = require 'renderer'
+typer = require 'typer'
 
 
 function love.load()
@@ -45,18 +46,6 @@ function love.load()
 end
 
 
-function updateCorrect(word)
-    table.insert(word.typed, table.remove(word.untyped, 1))
-    if next(word.untyped) == nil then -- If this word is now empty
-        word.complete = true
-        if next(words.todo) ~= nil then
-            table.insert(words.done, table.remove(words.todo, 1)) -- Move into completed
-            log.info('Word complete')
-        end
-    end
-end
-
-
 function love.keypressed(k)
     local current_word = words.todo[1]
     local next_letter = current_word.untyped[1]
@@ -64,7 +53,7 @@ function love.keypressed(k)
     if k == 'escape' then
         love.event.quit()
     elseif k == next_letter then
-        updateCorrect(current_word)
+        typer.updateCorrect(current_word)
     elseif k == 'space' or k == 'return' then
         if next(current_word.typed) == nil and not current_word.complete then -- Did we just finish the last word?
             current_word.complete = true
