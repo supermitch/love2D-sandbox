@@ -2,7 +2,7 @@ log = require 'log'
 
 renderer = require 'renderer'
 typer = require 'typer'
-
+collider = require 'collider'
 
 function love.load()
     -- Screen properties
@@ -45,7 +45,6 @@ function love.load()
 
 end
 
-
 function love.keypressed(k)
     local current_word = words.todo[1]
     local next_letter = current_word.untyped[1]
@@ -73,20 +72,12 @@ function love.keypressed(k)
 
 end
 
-
 function love.update(dt)
     -- keyboard actions for our hero
 end
-
 
 function love.draw()
     renderer.draw_ground(screen)
     renderer.draw_hero(hero)
     renderer.print_words(words)
-end
-
--- Checks if rectangles a and b overlap.
-function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
-  local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
-  return ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1
 end
